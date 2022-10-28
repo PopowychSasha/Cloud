@@ -1,0 +1,19 @@
+{
+  "name": "files_popovych",
+  "version": "1.0.0",
+  "description": "files_popovych wise project",
+  "main": "server.js",
+  "type": "module",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
