@@ -8,7 +8,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "dev": "nodemon server.js",
+    "dev": "nodemon app.js",
     "lint": "npx eslint ./",
     "prettier": "npx prettier --write ./ --ignore-unknown",
     "prettier-check": "npx prettier --check ./ --ignore-unknown"
