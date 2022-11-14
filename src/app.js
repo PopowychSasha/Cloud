@@ -1,5 +1,4 @@
 import Server from '../lib/server.js'
-
 const app = new Server()
 
 app.get('/user', (req, res) => {
