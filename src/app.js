@@ -1,9 +1,13 @@
 import Server from '../lib/server.js'
 const app = new Server()
 
-app.get('/user/:id', (req, res) => {
-  console.log(req.params)
-  res.status(200).json({ message: 'This is get:user HTTP method' })
+app.get('/user/:id', (req, res, next) => {
+  try {
+    console.log(req.params)
+    res.status(200).json({ message: 'This is get:user HTTP method' })
+  } catch (err) {
+    next(err)
+  }
 })
 app.post('/user', async (req, res) => {
   const body = await req.toJson()
