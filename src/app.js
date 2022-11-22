@@ -1,7 +1,8 @@
 import Server from '../lib/server.js'
 const app = new Server()
 
-app.get('/user', (req, res) => {
+app.get('/user/:id', (req, res) => {
+  console.log(req.params)
   res.status(200).json({ message: 'This is get:user HTTP method' })
 })
 app.post('/user', async (req, res) => {
@@ -15,6 +16,7 @@ app.put('/user', (req, res) => {
 app.delete('/user', (req, res) => {
   res.status(200).json({ message: 'This is delete:user HTTP method' })
 })
+
 app.listen(5000, (port) => {
   console.log(`Server is started on port ${port}`)
 })
