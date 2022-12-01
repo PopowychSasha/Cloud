@@ -7,10 +7,19 @@
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
+    "requireConfigFile": false,
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
   },
+  "parser": "@babel/eslint-parser",
+
+  "plugins": ["jsx"],
+
   "rules": {
     "quotes": ["error", "single"],
-    "no-prototype-builtins": ["off", "always"]
+    "no-prototype-builtins": ["off", "always"],
+    "no-unused-vars": ["off"]
   }
 }

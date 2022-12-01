@@ -1,7 +1,7 @@
 name: Check linting and formating
 on: push
 jobs:
-  eslint-prettier:
+  eslint-prettier-client:
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -12,7 +12,22 @@ jobs:
           node-version: 16
       - name: Install dependency
         run: npm ci
-      - name: Check lint
-        run: npm run lint
-      - name: Check prettier
-        run: npm run prettier-check
+      - name: Check lint for client
+        run: npm run lint_client
+      - name: Check prettier for client
+        run: npm run prettier_check_client
+  eslint-prettier-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependency
+        run: npm ci
+      - name: Check lint for server
+        run: npm run lint_server
+      - name: Check prettier for server
+        run: npm run prettier_check_server
