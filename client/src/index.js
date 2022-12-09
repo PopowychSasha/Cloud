@@ -1,10 +1,12 @@
-import { render, jsx } from '../lib/setUpComponents.js'
+import { render, jsx } from '../lib/hooks.js'
+import { Header } from './components/Header.js'
+import { SignUpForm } from './components/SignUpForm.js'
 
-const App = () => {
+export const App = () => {
   return (
     <div>
-      <div>Title</div>
-      <div>Content</div>
+      <Header />
+      <SignUpForm />
     </div>
   )
 }
