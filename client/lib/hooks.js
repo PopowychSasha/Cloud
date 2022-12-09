@@ -26,7 +26,7 @@ export const component = (c) => (props) => {
 
 export function useState(initial) {
   if (!hookState.hasOwnProperty(key)) {
-    hookState[key] = {}
+    hookState[key] = []
   }
   hookId++
 
@@ -54,5 +54,37 @@ export function useState(initial) {
 
   return [hookState[key][stateId].value, hookState[key][stateId].setValue]
 }
+
+const dependenciesChanged = (savedDeps, deps) => {
+  if (deps === undefined) {
+    return true
+  }
+
+  for (const item in deps) {
+    if (!Object.is(savedDeps[item], deps[item])) {
+      return true
+    }
+  }
+  return false
+}
+
+export const useMemo = (func, dependencies) => {
+  if (!hookState.hasOwnProperty(key)) {
+    hookState[key] = []
+  }
+  hookId++
+
+  if (
+    hookState[key][hookId] === undefined ||
+    dependenciesChanged(hookState[key][hookId].dependencies, dependencies)
+  ) {
+    hookState[key][hookId] = { value: func(), dependencies: dependencies }
+  }
+
+  return hookState[key][hookId].value
+}
+
+export const useCallback = (func, dependencies) =>
+  useMemo(() => func, dependencies)
 
 export { jsx }
