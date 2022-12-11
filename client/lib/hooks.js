@@ -1,8 +1,24 @@
-import { init, eventListenersModule } from 'snabbdom'
+import { init, styleModule, eventListenersModule } from 'snabbdom'
 import { jsx } from 'snabbdom'
 import { App } from '../src/index.js'
 
-const patch = init([eventListenersModule])
+let cleaningFunctions = {}
+
+const onRemoveComponent = {
+  remove: function (vnode, removeCallback) {
+    for (const key in cleaningFunctions) {
+      delete hookState[key][cleaningFunctions[key].hookId]
+
+      if (typeof cleaningFunctions[key].cleaningFunction === 'function') {
+        cleaningFunctions[key].cleaningFunction()
+      }
+    }
+    cleaningFunctions = {}
+    removeCallback()
+  },
+}
+
+const patch = init([styleModule, eventListenersModule, onRemoveComponent])
 let dom = {}
 
 let hookId = 0
@@ -87,4 +103,21 @@ export const useMemo = (func, dependencies) => {
 export const useCallback = (func, dependencies) =>
   useMemo(() => func, dependencies)
 
+export function useEffect(callback, dependencies) {
+  if (!hookState.hasOwnProperty(key)) {
+    hookState[key] = []
+  }
+
+  hookId++
+
+  if (
+    hookState[key][hookId] === undefined ||
+    dependenciesChanged(hookState[key][hookId].dependencies, dependencies)
+  ) {
+    hookState[key][hookId] = {
+      dependencies: dependencies,
+    }
+    cleaningFunctions[key] = { hookId, cleaningFunction: callback() }
+  }
+}
 export { jsx }

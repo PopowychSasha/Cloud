@@ -1,12 +1,12 @@
 import { render, jsx } from '../lib/hooks.js'
 import { Header } from './components/Header.js'
-import { SignUpForm } from './components/SignUpForm.js'
+import { SignUpForm, TestComponent } from './components/SignUpForm.js'
 
 export const App = () => {
   return (
     <div>
       <Header />
-      <SignUpForm />
+      <TestComponent />
     </div>
   )
 }
