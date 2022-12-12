@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from '../../lib/hooks.js'
+import { useReducer, useEffect, useMemo } from '../../lib/hooks.js'
 import { component, useState } from '../../lib/hooks.js'
 import { jsx } from '../../lib/hooks.js'
 

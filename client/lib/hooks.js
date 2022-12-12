@@ -103,6 +103,37 @@ export const useMemo = (func, dependencies) => {
 export const useCallback = (func, dependencies) =>
   useMemo(() => func, dependencies)
 
+export function useReducer(reducerFn, initial, init) {
+  const reducerKey = key
+
+  if (!hookState.hasOwnProperty(reducerKey)) {
+    hookState[reducerKey] = []
+  }
+  hookId++
+  const stateId = hookId
+
+  const dispatchFn = (action) => {
+    const newValue = reducerFn(hookState[reducerKey][stateId].value, action)
+    if (Object.is(newValue, hookState[reducerKey][stateId].value)) {
+      return
+    }
+    hookState[reducerKey][stateId].value = newValue
+    rerender()
+  }
+
+  if (!hookState[reducerKey][stateId]) {
+    if (init) {
+      initial = init(initial)
+    }
+    hookState[reducerKey][stateId] = { value: initial, dispatchFn }
+  }
+
+  return [
+    hookState[reducerKey][stateId].value,
+    hookState[reducerKey][stateId].dispatchFn,
+  ]
+}
+
 export function useEffect(callback, dependencies) {
   if (!hookState.hasOwnProperty(key)) {
     hookState[key] = []
@@ -120,4 +151,5 @@ export function useEffect(callback, dependencies) {
     cleaningFunctions[key] = { hookId, cleaningFunction: callback() }
   }
 }
+
 export { jsx }
