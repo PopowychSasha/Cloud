@@ -22,11 +22,16 @@ const patch = init([styleModule, eventListenersModule, onRemoveComponent])
 let dom = {}
 
 let hookId = 0
-export let hookState = {}
+export let hookState = {
+  context: {},
+}
 
 export const render = (application, rootContainer) => {
   hookId = 0
   dom = patch(rootContainer, application)
+  if (Object.keys(dom).length !== 0) {
+    rerender()
+  }
 }
 
 const rerender = () => {
@@ -35,10 +40,12 @@ const rerender = () => {
 }
 
 let key = ''
-export const component = (c) => (props) => {
-  key = new Error().stack.split('\n')[3]
-  return c(props)
-}
+export const component =
+  (c) =>
+  (...args) => {
+    key = new Error().stack.split('\n')[3]
+    return c(...args)
+  }
 
 export function useState(initial) {
   if (!hookState.hasOwnProperty(key)) {
@@ -150,6 +157,21 @@ export function useEffect(callback, dependencies) {
     }
     cleaningFunctions[key] = { hookId, cleaningFunction: callback() }
   }
+}
+
+export const createContext = (data, children) => {
+  if (Object.keys(hookState.context).length === 0) {
+    hookState.context = data
+  }
+
+  return <div>{children}</div>
+}
+export const change = (callback) => {
+  callback()
+  rerender()
+}
+export function useContext() {
+  return hookState.context
 }
 
 export { jsx }
