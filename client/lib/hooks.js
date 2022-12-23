@@ -1,6 +1,7 @@
 import { init, eventListenersModule, classModule } from 'snabbdom'
 import { jsx } from 'snabbdom'
-
+import { App } from '../src/index.js'
+import PropTypes from './prop-types.js'
 let cleaningFunctions = {}
 
 const onRemoveComponent = {
@@ -42,12 +43,21 @@ const rerender = () => {
 }
 
 let key = ''
-export const component =
-  (c) =>
-  (...args) => {
+
+export const component = (c) => {
+  const componentFunc = (...args) => {
+    if (componentFunc.propTypes && args[0]) {
+      const result = PropTypes.shape(componentFunc.propTypes)(args[0], [])
+      if (result.length > 0) {
+        console.error(result)
+      }
+    }
+
     key = new Error().stack.split('\n')[3]
     return c(...args)
   }
+  return componentFunc
+}
 
 export function useState(initial) {
   if (!hookState.hasOwnProperty(key)) {

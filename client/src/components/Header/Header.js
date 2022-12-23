@@ -1,5 +1,6 @@
 import { component } from '../../../lib/hooks.js'
 import { jsx } from '../../../lib/hooks.js'
+import PropTypes from '../../../lib/prop-types.js'
 import './Header.css'
 
 export const Header = component(({ formsToggle }) => {
@@ -9,3 +10,7 @@ export const Header = component(({ formsToggle }) => {
     </h1>
   )
 })
+
+Header.propTypes = {
+  formsToggle: PropTypes.boolean,
+}
