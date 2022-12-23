@@ -1,6 +1,5 @@
-import { init, styleModule, eventListenersModule } from 'snabbdom'
+import { init, eventListenersModule, classModule } from 'snabbdom'
 import { jsx } from 'snabbdom'
-import { App } from '../src/index.js'
 
 let cleaningFunctions = {}
 
@@ -18,7 +17,7 @@ const onRemoveComponent = {
   },
 }
 
-const patch = init([styleModule, eventListenersModule, onRemoveComponent])
+const patch = init([eventListenersModule, onRemoveComponent, classModule])
 let dom = {}
 
 let hookId = 0
@@ -26,9 +25,12 @@ export let hookState = {
   context: {},
 }
 
+let componentFunc
+
 export const render = (application, rootContainer) => {
+  componentFunc = application
   hookId = 0
-  dom = patch(rootContainer, application)
+  dom = patch(rootContainer, componentFunc())
   if (Object.keys(dom).length !== 0) {
     rerender()
   }
@@ -36,7 +38,7 @@ export const render = (application, rootContainer) => {
 
 const rerender = () => {
   hookId = 0
-  dom = patch(dom, <App></App>)
+  dom = patch(dom, componentFunc())
 }
 
 let key = ''

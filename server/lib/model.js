@@ -94,6 +94,16 @@ export default class Model {
       }
     }
   }
+  selectByParameter(requirement) {
+    for (const entity of this.#data) {
+      if (
+        entity[Object.keys(requirement)[0]] ===
+        requirement[Object.keys(requirement)[0]]
+      ) {
+        return entity
+      }
+    }
+  }
   updateById(id, newDataForEntity) {
     this.#validate(newDataForEntity)
 

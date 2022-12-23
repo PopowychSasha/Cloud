@@ -17,6 +17,13 @@ export default {
     static: {
       directory: path.resolve('.'),
     },
+    proxy: [
+      {
+        path: '/api/',
+        target: 'http://localhost:5000',
+      },
+    ],
+    historyApiFallback: true,
   },
   module: {
     rules: [
@@ -37,6 +44,10 @@ export default {
             ],
           },
         },
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },

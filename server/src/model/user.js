@@ -7,20 +7,17 @@ export default class UserModel extends Model {
       isRequired: true,
       minLength: 2,
       maxLength: 20,
-      regex: /.../,
     },
-    age: {
-      type: 'number',
-      isRequired: true,
-      minNumber: 6,
-      maxNumber: 100,
-    },
-    other: {
+    email: {
       type: 'string',
-      isRequired: false,
+      isRequired: true,
+      regex: /gmail.com/,
+    },
+    password: {
+      type: 'string',
+      isRequired: true,
       minLength: 2,
       maxLength: 100,
-      regex: /./,
     },
   }
 }

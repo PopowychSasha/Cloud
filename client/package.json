@@ -16,8 +16,10 @@
   "dependencies": {
     "axios": "^1.2.0",
     "concurrently": "^7.6.0",
+    "css-loader": "^6.7.3",
     "snabbdom": "^3.5.1",
-    "snabbdom-jsx": "^0.4.2"
+    "snabbdom-jsx": "^0.4.2",
+    "style-loader": "^3.3.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
@@ -27,5 +29,6 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.0",
     "webpack-dev-server": "^4.11.1"
-  }
+  },
+  "proxy": "http://localhost:5000/"
 }
