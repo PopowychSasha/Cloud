@@ -8,7 +8,16 @@
     "lib": "lib"
   },
   "scripts": {
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "knex_init": "npx knex init --cwd ./db/",
+    "create_migrate": "npx knex migrate:make --cwd ./db/",
+    "migrate_up": "npx knex migrate:up --cwd ./db/",
+    "migrate_down": "npx knex migrate:down --cwd ./db/",
+    "migrate_latest": "knex migrate:latest --cwd ./db/",
+    "migrate_rollback": "knex migrate:rollback --all --cwd ./db/",
+    "make_seed": "knex seed:make --cwd ./db/",
+    "seed": "knex seed:run --cwd ./db/",
+    "db": "npm run migrate_latest && npm run seed"
   },
   "author": "",
   "license": "ISC",
