@@ -21,6 +21,7 @@ export const seed = async function (knex) {
       email_confirmation_token: 'djwe#*(3edjk#@*(#@Hjkdha',
       is_confirmed: false,
       role_id: 1,
+      refreshToken: 'iojdq90we-duqiwejdqpwed90-13jedqweqdwedqw90edqjwedq',
     },
     {
       id: 2,
@@ -30,15 +31,22 @@ export const seed = async function (knex) {
       email_confirmation_token: 'ieuwqyr9384ry234uiid23h4iod',
       is_confirmed: false,
       role_id: 2,
+      refreshToken: 'kogp[ertkge0rtkge0rtkgepr[tgokw[rtegk[protgke[rptogg',
     },
   ])
 
-  await knex('recover_password_tokens').del()
-  await knex('recover_password_tokens').insert([
-    { id: 1, token: 'hythtyepj#*jkdwoquimvl#@', user_id: 1 },
+  await knex('reset_password_tokens').del()
+  await knex('reset_password_tokens').insert([
+    {
+      id: 1,
+      token: 'hythtyepj#*jkdwoquimvl#@',
+      activeUntil: new Date(new Date().getTime() + 3600000),
+      user_id: 1,
+    },
     {
       id: 2,
       token: 'wepoiu2309uf234opf234234f2',
+      activeUntil: new Date(new Date().getTime() + 3600000),
       user_id: 1,
     },
   ])

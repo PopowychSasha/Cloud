@@ -10,7 +10,7 @@ export const up = async function (knex) {
     table.string('password').notNullable()
     table.string('email_confirmation_token').notNullable()
     table.boolean('is_confirmed').defaultTo(false)
-    table.integer('role_id').unsigned().notNullable()
+    table.integer('role_id').unsigned().notNullable().defaultTo(1)
     table.timestamps(true, true)
 
     table.foreign('role_id').references('roles.id')
