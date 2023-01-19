@@ -11,8 +11,10 @@ jobs:
         with:
           node-version: 16
       - name: Install dependency
-        run: npm ci
-      - name: Check lint for client
+        run: |
+          cd client
+          npm ci
+      - name: Check lint for server
         run: npm run lint_client
       - name: Check prettier for client
         run: npm run prettier_check_client
