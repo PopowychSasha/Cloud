@@ -6,8 +6,8 @@ import authRouter from '../route/auth.js'
 import resetPasswordRouter from '../route/reset-password.js'
 import { passport } from '../authentication/passport.js'
 
-const app = express()
-dotenv.config()
+export const app = express()
+dotenv.config({ path: '../.env' })
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -20,8 +20,4 @@ app.use('/api', resetPasswordRouter)
 
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
-})
-
-app.listen(process.env.PORT, () => {
-  console.log(`Server is started on PORT ${process.env.PORT}`)
 })

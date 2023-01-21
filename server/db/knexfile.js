@@ -22,4 +22,19 @@ export default {
       directory: './seeds',
     },
   },
+  test: {
+    client: 'mysql2',
+    connection: {
+      database: 'files_popovych_test',
+      user: 'root',
+      password: 'mainAdmin1',
+    },
+    pool: {
+      min: 2,
+      max: 10,
+    },
+    migrations: {
+      tableName: 'knex_migrations',
+    },
+  },
 }

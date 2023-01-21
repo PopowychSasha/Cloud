@@ -5,7 +5,7 @@ import { validationResult } from 'express-validator'
 import { updateUserPassword } from '../service/reset-password/update-user-password.js'
 import { checkResetPasswordToken } from '../service/reset-password/check-reset-password-token.js'
 
-export const resetPassword = async (req, res, next) => {
+export const resetPasswordController = async (req, res, next) => {
   try {
     const { email } = req.body
     const user = await findUserByEmail(email)
@@ -25,13 +25,13 @@ export const resetPassword = async (req, res, next) => {
   }
 }
 
-export const resetUserPassword = async (req, res, next) => {
+export const resetUserPasswordController = async (req, res, next) => {
   try {
     const { token } = req.params
     const isTokenValid = await checkResetPasswordToken(token)
 
     if (!isTokenValid) {
-      return res.send(
+      return res.status(403).send(
         `<center>
           <h1>The password reset link is not valid</h1>
         </center>`
@@ -52,7 +52,7 @@ export const resetUserPassword = async (req, res, next) => {
   }
 }
 
-export const setNewPassword = async (req, res, next) => {
+export const setNewPasswordController = async (req, res, next) => {
   try {
     const { token } = req.params
     if (req.body.newPassword !== req.body.confirmPassword) {

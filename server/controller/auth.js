@@ -1,5 +1,4 @@
 import { registerUser } from '../service/auth/register-user.js'
-import { findUserByEmail } from '../service/auth/find-user-by-email.js'
 import { setTokens } from '../service/auth/set-tokens.js'
 import { findUserByEmailAndPassword } from '../service/auth/find-user-by-email-and-password.js'
 

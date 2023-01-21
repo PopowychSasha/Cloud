@@ -8,7 +8,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "dev": "nodemon src/app.js",
+    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --detectOpenHandles",
+    "dev": "nodemon src/index.js",
     "knex_init": "npx knex init --cwd ./db/",
     "create_migrate": "npx knex migrate:make --cwd ./db/",
     "migrate_up": "npx knex migrate:up --cwd ./db/",
@@ -17,15 +18,19 @@
     "migrate_rollback": "knex migrate:rollback --all --cwd ./db/",
     "make_seed": "knex seed:make --cwd ./db/",
     "seed": "knex seed:run --cwd ./db/",
-    "db": "npm run migrate_latest && npm run seed"
+    "db": "npm run migrate_latest && npm run seed",
+    "db_test": "cross-env NODE_ENV=test npm run migrate_latest"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^8.32.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.26.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^29.3.1",
     "nodemon": "^2.0.20",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",

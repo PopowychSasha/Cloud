@@ -1,8 +1,8 @@
 import { Router } from 'express'
 import {
-  resetPassword,
-  resetUserPassword,
-  setNewPassword,
+  resetPasswordController,
+  resetUserPasswordController,
+  setNewPasswordController,
 } from '../controller/reset-password.js'
 import { check } from 'express-validator'
 import { validator } from '../request-validator/validator.js'
@@ -13,10 +13,10 @@ routes.post(
   '/reset/password',
   [check('email').isEmail()],
   validator,
-  resetPassword
+  resetPasswordController
 )
 
-routes.get('/reset/password/:token', resetUserPassword)
+routes.get('/reset/password/:token', resetUserPasswordController)
 
 routes.post(
   '/set/new/password/:token',
@@ -25,7 +25,7 @@ routes.post(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
     ),
   ],
-  setNewPassword
+  setNewPasswordController
 )
 
 export default routes
