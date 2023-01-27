@@ -1,4 +1,6 @@
 import { Box, Container } from '@mui/material'
+import AuthForm from '../../components/AuthForm/AuthForm'
+import Header from '../../share/Header/Header'
 
 function AuthPage() {
   return (
@@ -10,7 +12,10 @@ function AuthPage() {
         height: '100vh',
       }}
     >
-      Hello word
+      <Header />
+      <Container sx={{ marginTop: 12 }}>
+        <AuthForm />
+      </Container>
     </Box>
   )
 }

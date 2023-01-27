@@ -11,7 +11,7 @@ dotenv.config({ path: '../.env' })
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(cors())
+app.use(cors({ credentials: true }))
 app.use(cookieParser())
 app.use(passport.initialize())
 

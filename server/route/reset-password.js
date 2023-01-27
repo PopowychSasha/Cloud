@@ -11,7 +11,7 @@ const routes = Router()
 
 routes.post(
   '/reset/password',
-  [check('email').isEmail()],
+  [check('email').isEmail().withMessage('does not match the template')],
   validator,
   resetPasswordController
 )

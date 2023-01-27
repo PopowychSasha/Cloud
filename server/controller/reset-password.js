@@ -6,8 +6,8 @@ import { updateUserPassword } from '../service/reset-password/update-user-passwo
 import { checkResetPasswordToken } from '../service/reset-password/check-reset-password-token.js'
 
 export const resetPasswordController = async (req, res, next) => {
+  const { email } = req.body
   try {
-    const { email } = req.body
     const user = await findUserByEmail(email)
 
     if (!user) {
@@ -18,16 +18,15 @@ export const resetPasswordController = async (req, res, next) => {
 
     await initPasswordResetToken(user.id)
     await sendResetPasswordEmail(email, user.id)
-
-    return res.status(200).json({})
   } catch (err) {
-    next(err)
+    return next(err)
   }
+  return res.status(200).json({})
 }
 
 export const resetUserPasswordController = async (req, res, next) => {
+  const { token } = req.params
   try {
-    const { token } = req.params
     const isTokenValid = await checkResetPasswordToken(token)
 
     if (!isTokenValid) {
@@ -53,8 +52,8 @@ export const resetUserPasswordController = async (req, res, next) => {
 }
 
 export const setNewPasswordController = async (req, res, next) => {
+  const { token } = req.params
   try {
-    const { token } = req.params
     if (req.body.newPassword !== req.body.confirmPassword) {
       return res.send(
         `<center>

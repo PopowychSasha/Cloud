@@ -4,7 +4,7 @@ import './index.css'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { createTheme, ThemeProvider } from '@mui/material'
-import App from './component/App/App'
+import App from './components/App/App'
 import reportWebVitals from './reportWebVitals'
 import store from './redux/index'
 
