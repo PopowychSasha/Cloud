@@ -5,7 +5,7 @@ function FormTitle({ formToggle, setFormToggle }) {
   return (
     <Box sx={{ display: 'flex', marginBottom: 2 }}>
       <FormTitlePart
-        title="SIGN UP"
+        title="SIGN IN"
         formToggle={formToggle}
         setFormToggle={setFormToggle}
       />
