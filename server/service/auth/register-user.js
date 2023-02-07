@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import bcrypt from 'bcrypt'
 
 export const registerUser = async (name, email, password) => {
-  const [user] = await db('users').where('email', '=', email)
+  const user = await db('users').where('email', '=', email).first()
 
   if (user) {
     throw new Error('The user with this email is already registered')

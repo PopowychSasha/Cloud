@@ -26,7 +26,7 @@ describe('reset-password.js/resetPasswordController', () => {
     await request.post('/api/authenticate').send(authenticationBody)
 
     const { body, status } = await request
-      .post('/api/reset/password')
+      .post('/api/reset_password_link')
       .send({ email: 'sashapopovych2003@gmail.com' })
 
     expect(body).toEqual({})
@@ -34,7 +34,7 @@ describe('reset-password.js/resetPasswordController', () => {
   })
   it('should return 404 status because user with this email to reset password not found', async () => {
     const { body, status } = await request
-      .post('/api/reset/password')
+      .post('/api/reset_password_link')
       .send({ email: 'sashapopovych2003@gmail.com' })
 
     expect(body).toEqual({

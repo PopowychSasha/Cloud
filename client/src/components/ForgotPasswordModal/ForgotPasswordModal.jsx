@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import * as React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -27,7 +28,7 @@ function ForgotPasswordModal({ resetPasswordOpen, handleClose }) {
 
   const sendPasswordResetLink = () => {
     $api
-      .post('/api/reset/password', { email })
+      .post('/api/reset_password_link', { email })
       .then((data) => {
         if (data) {
           setEmail('')
@@ -84,6 +85,11 @@ function ForgotPasswordModal({ resetPasswordOpen, handleClose }) {
       </Box>
     </Modal>
   )
+}
+
+ForgotPasswordModal.propTypes = {
+  resetPasswordOpen: PropTypes.bool,
+  handleClose: PropTypes.func,
 }
 
 export default ForgotPasswordModal

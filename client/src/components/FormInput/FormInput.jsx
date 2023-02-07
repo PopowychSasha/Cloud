@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import {
   FormControl,
   IconButton,
@@ -58,6 +59,14 @@ function FormInput({ title, icon, type = 'text', value, setValue }) {
       />
     </FormControl>
   )
+}
+
+FormInput.propTypes = {
+  title: PropTypes.string,
+  icon: PropTypes.object,
+  type: PropTypes.string,
+  value: PropTypes.string,
+  setValue: PropTypes.func,
 }
 
 export default FormInput

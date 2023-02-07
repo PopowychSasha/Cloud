@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import { Box } from '@mui/material'
 import FormTitlePart from '../FormTitlePart/FormTitlePart'
 
@@ -16,6 +17,11 @@ function FormTitle({ formToggle, setFormToggle }) {
       />
     </Box>
   )
+}
+
+FormTitle.propTypes = {
+  formToggle: PropTypes.bool,
+  setFormToggle: PropTypes.func,
 }
 
 export default FormTitle

@@ -9,7 +9,7 @@ function AuthForm() {
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-      <Box sx={{ width: 650, minHeight: 414, bgcolor: 'primary.form_bg' }}>
+      <Box sx={{ width: 650, minHeight: 414, bgcolor: 'primary.formBg' }}>
         <FormTitle formToggle={formToggle} setFormToggle={setFormToggle} />
         {formToggle ? <SignInForm /> : <SignUpForm />}
       </Box>

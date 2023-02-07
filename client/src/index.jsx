@@ -12,7 +12,7 @@ const theme = createTheme({
   palette: {
     primary: {
       main: '#293133',
-      form_bg: '#212729',
+      formBg: '#212729',
       orange: '#FA4616',
     },
   },

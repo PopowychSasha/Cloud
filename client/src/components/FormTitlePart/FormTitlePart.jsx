@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types'
 import { Button, Typography } from '@mui/material'
 import Image from 'mui-image'
-import active_link_line from '../../image/active_link_line.png'
-import un_active_link_line from '../../image/un_active_link_line.png'
+import activeLinkLine from '../../image/active_link_line.png'
+import unActiveLinkLine from '../../image/un_active_link_line.png'
 
 function FormTitlePart({ title, formToggle, setFormToggle }) {
   return (
@@ -11,12 +12,18 @@ function FormTitlePart({ title, formToggle, setFormToggle }) {
     >
       <Typography sx={{ color: 'primary.orange' }}>{title}</Typography>
       <Image
-        src={formToggle ? active_link_line : un_active_link_line}
+        src={formToggle ? activeLinkLine : unActiveLinkLine}
         height={2}
         style={{ marginTop: '21px' }}
       />
     </Button>
   )
+}
+
+FormTitlePart.propTypes = {
+  title: PropTypes.string,
+  formToggle: PropTypes.bool,
+  setFormToggle: PropTypes.func,
 }
 
 export default FormTitlePart

@@ -66,7 +66,7 @@ describe('auth.js/registerController', () => {
       body.id,
       body.name,
       body.email,
-      body.role_id,
+      body.roleId,
       body.accessToken,
     ]).not.toBeUndefined()
   })

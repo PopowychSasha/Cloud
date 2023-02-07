@@ -42,7 +42,7 @@ router.post(
 )
 router.get('/logout', logout)
 
-router.get('/refresh/access/token', refreshAccessToken)
+router.get('/access_token', refreshAccessToken)
 router.get(
   '/user',
   passport.authenticate('jwt', { session: false }),

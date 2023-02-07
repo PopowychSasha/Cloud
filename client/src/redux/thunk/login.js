@@ -10,6 +10,7 @@ function loginUser({ email, setEmail, password, setPassword, navigate }) {
         if (data) {
           dispatch(userActions.setUserData(data.data))
           localStorage.setItem('accessToken', data.data.accessToken)
+
           setEmail('')
           setPassword('')
           message({

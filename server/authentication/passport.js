@@ -11,8 +11,8 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
 
 opts.secretOrKey = process.env.TOKEN_KEY
 
-const strategy = new JwtStrategy(opts, function (jwt_payload, done) {
-  return done(null, jwt_payload, null)
+const strategy = new JwtStrategy(opts, function (jwtPayload, done) {
+  return done(null, jwtPayload, null)
 })
 
 passport.use(strategy)

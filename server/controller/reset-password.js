@@ -5,7 +5,7 @@ import { validationResult } from 'express-validator'
 import { updateUserPassword } from '../service/reset-password/update-user-password.js'
 import { checkResetPasswordToken } from '../service/reset-password/check-reset-password-token.js'
 
-export const resetPasswordController = async (req, res, next) => {
+export const resetPasswordLink = async (req, res, next) => {
   const { email } = req.body
   try {
     const user = await findUserByEmail(email)
@@ -24,7 +24,7 @@ export const resetPasswordController = async (req, res, next) => {
   return res.status(200).json({})
 }
 
-export const resetUserPasswordController = async (req, res, next) => {
+export const resetUserPassword = async (req, res, next) => {
   const { token } = req.params
   try {
     const isTokenValid = await checkResetPasswordToken(token)
@@ -37,7 +37,7 @@ export const resetUserPasswordController = async (req, res, next) => {
       )
     }
     return res.send(
-      `<form action="/api/set/new/password/${token}" method="post">
+      `<form action="/api/new_password/${token}" method="post">
           <h2>Enter a new password</h2>
           <input type="password" minlength="8" placeholder="password" name="newPassword"/>
           <br/><br/> 
@@ -51,7 +51,7 @@ export const resetUserPasswordController = async (req, res, next) => {
   }
 }
 
-export const setNewPasswordController = async (req, res, next) => {
+export const setNewPassword = async (req, res, next) => {
   const { token } = req.params
   try {
     if (req.body.newPassword !== req.body.confirmPassword) {
@@ -59,7 +59,7 @@ export const setNewPasswordController = async (req, res, next) => {
         `<center>
           <h2>
             Password and confirm password not matched
-            <a href='http://${process.env.HOST}:${process.env.PORT}/api/reset/password/${token}'>try again</a>
+            <a href='http://${process.env.HOST}:${process.env.PORT}/api/reset_password/${token}'>try again</a>
           </h2>
         </center>`
       )
@@ -71,7 +71,7 @@ export const setNewPasswordController = async (req, res, next) => {
         `<center>
           <h2>
             Password must has minimum eight characters, at least one letter and one number 
-            <a href='http://${process.env.HOST}:${process.env.PORT}/api/reset/password/${token}'>try again</a>
+            <a href='http://${process.env.HOST}:${process.env.PORT}/api/reset_password/${token}'>try again</a>
           </h2>
         </center>`
       )

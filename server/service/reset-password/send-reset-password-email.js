@@ -11,7 +11,7 @@ export const sendResetPasswordEmail = async (email, user_id) => {
     await transport.sendMail({
       to: email,
       subject: 'Account password reset',
-      html: `<div>Click on <a href="http://${process.env.HOST}:${process.env.PORT}/api/reset/password/${resetPasswordToken.token}">reset password</a> to change it</div>`,
+      html: `<div>Click on <a href="http://${process.env.HOST}:${process.env.PORT}/api/reset_password/${resetPasswordToken.token}">reset password</a> to change it</div>`,
     })
     return
   }

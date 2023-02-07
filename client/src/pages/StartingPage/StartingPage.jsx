@@ -1,39 +1,62 @@
-import { Box, Button, Typography } from '@mui/material'
-import { useLayoutEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Box, Container } from '@mui/material'
+import { useLayoutEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import ActionsMenu from '../../components/ActionsMenu/ActionsMenu'
+import CreateFolderModal from '../../components/CreateFolderModal/CreateFolderModal'
+import Details from '../../components/Details/Details'
+import Files from '../../components/Files/Files'
 import Message from '../../components/Message/Message'
-import $api from '../../http/request'
+import Header from '../../share/Header/Header'
 import { setUserInfo } from '../../redux/thunk/setUserInfo'
-import { userActions } from '../../redux/user'
+
+let folderStack = [null]
 
 function StartingPage() {
-  const user = useSelector((store) => store.userReducer)
-  const navigate = useNavigate()
   const dispatch = useDispatch()
+
+  const [createFolderOpen, setCreateFolderOpen] = useState(false)
+  const handleOpen = () => setCreateFolderOpen(true)
+  const handleClose = () => setCreateFolderOpen(false)
 
   useLayoutEffect(() => {
     dispatch(setUserInfo())
   }, [])
+
+  const verticalLine = (
+    <Box
+      sx={{
+        width: 3,
+        backgroundColor: '#FA4616',
+        minHeight: 'calc(100vh - 100px)',
+      }}
+    />
+  )
   return (
-    <Typography>
-      <Box>{user.isLoggedIn && JSON.stringify(user)}</Box>
-      <Button
-        variant="contained"
-        color="success"
-        sx={{ marginTop: 5 }}
-        onClick={() => {
-          localStorage.removeItem('accessToken')
-          dispatch(userActions.clearUserData())
-          $api('/api/logout').then(() => {
-            navigate('/')
-          })
-        }}
-      >
-        LogOut
-      </Button>
+    <Box
+      sx={{
+        bgcolor: 'primary.main',
+        border: 'solid',
+        minWidth: '100%',
+        minHeight: '100vh',
+      }}
+    >
+      <Header folderStack={folderStack} />
+      <Container sx={{ display: 'flex' }}>
+        {verticalLine}
+        <ActionsMenu handleOpen={handleOpen} folderStack={folderStack} />
+        {verticalLine}
+        <Files folderStack={folderStack} />
+        {verticalLine}
+        <Details />
+        {verticalLine}
+      </Container>
+      <CreateFolderModal
+        createFolderOpen={createFolderOpen}
+        handleClose={handleClose}
+        folderStack={folderStack}
+      />
       <Message />
-    </Typography>
+    </Box>
   )
 }
 

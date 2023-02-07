@@ -3,9 +3,10 @@ import db from '../../db/db.js'
 
 export const updateUserPassword = async (newPassword, token) => {
   await db.transaction(async (trx) => {
-    const [reset_password] = await db('reset_password_tokens')
+    const reset_password = await db('reset_password_tokens')
       .where('token', '=', token)
       .transacting(trx)
+      .first()
 
     await db('users')
       .update({ password: await bcrypt.hash(newPassword, 12) })
