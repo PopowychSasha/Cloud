@@ -4,12 +4,27 @@ import { findUserByEmailAndPassword } from '../service/auth/find-user-by-email-a
 import { newAccessToken } from '../service/auth/new-access-token.js'
 import jwt from 'jsonwebtoken'
 import { removeRefreshToken } from '../service/auth/remove-refresh-token.js'
+import { sendMail } from '../mail-transport/transport.js'
+import { findUserByEmail } from '../service/auth/find-user-by-email.js'
+import { activateUserAccount } from '../service/auth/activate-user-account.js'
+import { activationLink } from '../service/auth/activation-link.js'
 
 export const registerController = async (req, res, next) => {
   const { name, email, password } = req.body
   try {
     await registerUser(name, email, password)
+    const user = await findUserByEmail(email)
+    activationLink()
+    await sendMail(
+      {
+        email,
+        title: 'Account password reset',
+        link: activationLink(user.email_confirmation_token),
+      },
+      'account_activation'
+    )
   } catch (err) {
+    console.log(err)
     return next(err)
   }
   res.status(201).json({})
@@ -22,6 +37,10 @@ export const authenticationController = async (req, res, next) => {
 
     if (!user) {
       return res.status(403).json({ message: 'email or password is incorrect' })
+    } else if (!user.is_confirmed) {
+      return res
+        .status(403)
+        .json({ message: 'you need to activate your account' })
     }
 
     const { accessToken, refreshToken } = await setTokens(user)
@@ -72,4 +91,11 @@ export const logout = async (req, res, next) => {
   }
   res.clearCookie('refreshToken')
   res.json(req.cookies)
+}
+
+export const accountActivation = async (req, res, next) => {
+  const { email_confirmation_token } = req.params
+  const message = await activateUserAccount(email_confirmation_token)
+
+  res.status(200).json({ message })
 }

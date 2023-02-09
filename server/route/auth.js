@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import {
+  accountActivation,
   authenticationController,
   getUserInfo,
   logout,
@@ -48,5 +49,6 @@ router.get(
   passport.authenticate('jwt', { session: false }),
   getUserInfo
 )
+router.get('/activation/:email_confirmation_token', accountActivation)
 
 export default router

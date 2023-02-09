@@ -30,22 +30,12 @@ export const resetUserPassword = async (req, res, next) => {
     const isTokenValid = await checkResetPasswordToken(token)
 
     if (!isTokenValid) {
-      return res.status(403).send(
-        `<center>
-          <h1>The password reset link is not valid</h1>
-        </center>`
-      )
+      return res
+        .status(403)
+        .json({ message: 'the password reset link is not valid' })
     }
-    return res.send(
-      `<form action="/api/new_password/${token}" method="post">
-          <h2>Enter a new password</h2>
-          <input type="password" minlength="8" placeholder="password" name="newPassword"/>
-          <br/><br/> 
-          <input type="password" minlength="8" placeholder="confirm password" name="confirmPassword"/>
-          <br/><br/> 
-          <input type="submit" value="change"/>
-      </form>`
-    )
+
+    res.status(200).json({})
   } catch (err) {
     next(err)
   }
@@ -53,49 +43,29 @@ export const resetUserPassword = async (req, res, next) => {
 
 export const setNewPassword = async (req, res, next) => {
   const { token } = req.params
+  const { password, confirmPassword } = req.body
+
   try {
-    if (req.body.newPassword !== req.body.confirmPassword) {
-      return res.send(
-        `<center>
-          <h2>
-            Password and confirm password not matched
-            <a href='http://${process.env.HOST}:${process.env.PORT}/api/reset_password/${token}'>try again</a>
-          </h2>
-        </center>`
-      )
+    if (password !== confirmPassword) {
+      throw new Error('Password and confirm password not matched')
     }
 
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.send(
-        `<center>
-          <h2>
-            Password must has minimum eight characters, at least one letter and one number 
-            <a href='http://${process.env.HOST}:${process.env.PORT}/api/reset_password/${token}'>try again</a>
-          </h2>
-        </center>`
+      throw new Error(
+        'Password must has minimum eight characters, at least one letter and one number'
       )
     }
 
-    const { newPassword } = req.body
     const isTokenValid = await checkResetPasswordToken(token)
 
     if (!isTokenValid) {
-      return res.send(
-        `<center>
-          <h1>The password reset link is not valid</h1>
-        </center>`
-      )
+      throw new Error('The password reset link is not valid')
     }
-    await updateUserPassword(newPassword, token)
+    await updateUserPassword(password, token)
 
-    res.send(
-      `<center>
-        <h1>Password change was successful</h1>
-      </center>`
-    )
+    res.status(200).json({ message: 'Password change was successful' })
   } catch (err) {
-    console.log(err)
     next(err)
   }
 }

@@ -25,7 +25,7 @@ function SignUpForm() {
           setPassword('')
           setConfirmPassword('')
           message({
-            info: 'You have successfully registered',
+            info: 'Go to the email to activate the account',
             status: 'success',
           })
         }

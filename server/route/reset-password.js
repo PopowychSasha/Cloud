@@ -21,7 +21,7 @@ routes.get('/reset_password/:token', resetUserPassword)
 routes.post(
   '/new_password/:token',
   [
-    check('newPassword', 'confirmPassword').matches(
+    check('password', 'confirmPassword').matches(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
     ),
   ],

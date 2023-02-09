@@ -1,5 +1,6 @@
-import { transport } from '../../mail-transport/transport.js'
+import { sendMail } from '../../mail-transport/transport.js'
 import db from '../../db/db.js'
+import { resetPasswordLink } from './reset-password-link.js'
 
 export const sendResetPasswordEmail = async (email, user_id) => {
   let [resetPasswordToken] = await db('reset_password_tokens')
@@ -8,11 +9,14 @@ export const sendResetPasswordEmail = async (email, user_id) => {
     .andWhere('activeUntil', '>', new Date())
 
   if (resetPasswordToken) {
-    await transport.sendMail({
-      to: email,
-      subject: 'Account password reset',
-      html: `<div>Click on <a href="http://${process.env.HOST}:${process.env.PORT}/api/reset_password/${resetPasswordToken.token}">reset password</a> to change it</div>`,
-    })
+    await sendMail(
+      {
+        email,
+        title: 'Account password reset',
+        link: resetPasswordLink(resetPasswordToken.token),
+      },
+      'reset_password'
+    )
     return
   }
 }
