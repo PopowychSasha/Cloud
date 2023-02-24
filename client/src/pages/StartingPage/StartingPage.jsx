@@ -9,8 +9,6 @@ import Message from '../../components/Message/Message'
 import Header from '../../share/Header/Header'
 import { setUserInfo } from '../../redux/thunk/setUserInfo'
 
-let folderStack = [null]
-
 function StartingPage() {
   const dispatch = useDispatch()
 
@@ -40,12 +38,12 @@ function StartingPage() {
         minHeight: '100vh',
       }}
     >
-      <Header folderStack={folderStack} />
+      <Header />
       <Container sx={{ display: 'flex' }}>
         {verticalLine}
-        <ActionsMenu handleOpen={handleOpen} folderStack={folderStack} />
+        <ActionsMenu handleOpen={handleOpen} />
         {verticalLine}
-        <Files folderStack={folderStack} />
+        <Files />
         {verticalLine}
         <Details />
         {verticalLine}
@@ -53,7 +51,6 @@ function StartingPage() {
       <CreateFolderModal
         createFolderOpen={createFolderOpen}
         handleClose={handleClose}
-        folderStack={folderStack}
       />
       <Message />
     </Box>

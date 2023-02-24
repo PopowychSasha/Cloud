@@ -8,7 +8,7 @@ import { useState } from 'react'
 import SendIcon from '@mui/icons-material/Send'
 import $api from '../../http/request'
 import { message } from '../Message/Message'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { fileActions } from '../../redux/file'
 
 const style = {
@@ -25,9 +25,10 @@ const style = {
   padding: 4,
 }
 
-function CreateFolderModal({ createFolderOpen, handleClose, folderStack }) {
+function CreateFolderModal({ createFolderOpen, handleClose }) {
   const [name, setName] = useState('')
   const dispatch = useDispatch()
+  const folderStack = useSelector((store) => store.folderStackReducer)
 
   const createFolder = () => {
     $api
@@ -94,7 +95,6 @@ function CreateFolderModal({ createFolderOpen, handleClose, folderStack }) {
 CreateFolderModal.propTypes = {
   createFolderOpen: PropTypes.bool,
   handleClose: PropTypes.func,
-  folderStack: PropTypes.array,
 }
 
 export default CreateFolderModal

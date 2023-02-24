@@ -1,11 +1,12 @@
-import PropTypes from 'prop-types'
-import { Box } from '@mui/material'
+import { Box, TableRow } from '@mui/material'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchFiles } from '../../redux/thunk/fetchFiles'
 import ListOfFiles from '../ListOfFiles/ListOfFiles'
+import { Pagination } from '../Pagination/Pagination'
+import { GoBack } from '../GoBack/GoBack'
 
-function Files({ folderStack }) {
+function Files() {
   const dispatch = useDispatch()
   const user = useSelector((store) => store.userReducer)
   const files = useSelector((store) => store.fileReducer)
@@ -19,16 +20,20 @@ function Files({ folderStack }) {
   return (
     <Box
       sx={{
-        width: '60%',
+        width: '90%',
       }}
     >
-      <ListOfFiles files={files} folderStack={folderStack} />
+      {files.length === 0 && (
+        <TableRow>
+          <GoBack />
+        </TableRow>
+      )}
+
+      <ListOfFiles files={files} />
+
+      {files.length !== 0 && <Pagination />}
     </Box>
   )
-}
-
-Files.propTypes = {
-  folderStack: PropTypes.array,
 }
 
 export default Files

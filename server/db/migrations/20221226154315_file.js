@@ -6,6 +6,7 @@ export const up = async function (knex) {
   await knex.schema.createTable('files', (table) => {
     table.increments('id').unsigned().primary()
     table.string('name').notNullable()
+    table.integer('size').notNullable()
     table.string('hash').notNullable()
     table.timestamps(true, true)
   })

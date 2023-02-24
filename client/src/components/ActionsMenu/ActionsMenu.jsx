@@ -3,8 +3,10 @@ import { Box, Typography } from '@mui/material'
 import ActionsMenuBtn from '../ActionsMenuBtn/ActionsMenuBtn'
 import createFolder from '../../image/create_folder.png'
 import addFile from '../../image/add_files.png'
+import DeleteSelectedBtn from '../DeleteSelectedBtn/DeleteSelectedBtn'
+import Space from '../Space/Space'
 
-function ActionsMenu({ handleOpen, folderStack }) {
+function ActionsMenu({ handleOpen }) {
   return (
     <Box sx={{ width: 288 }}>
       <Typography
@@ -32,15 +34,15 @@ function ActionsMenu({ handleOpen, folderStack }) {
         color="#FA4616"
         type="file"
         isFilePicker={true}
-        folderStack={folderStack}
       />
+      <DeleteSelectedBtn />
+      <Space />
     </Box>
   )
 }
 
 ActionsMenu.propTypes = {
   handleOpen: PropTypes.func,
-  folderStack: PropTypes.array,
 }
 
 export default ActionsMenu

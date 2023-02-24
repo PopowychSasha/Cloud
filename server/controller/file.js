@@ -5,6 +5,9 @@ import crypto from 'crypto'
 import fs from 'fs'
 import { getFilePath } from '../service/file/get-file-path.js'
 import { getUsersFile } from '../service/file/get-users-file.js'
+import { deleteSelectedFiles } from '../service/file/delete-selected-files.js'
+import { getUsersSpace } from '../service/file/get-users-space.js'
+import { isDiskSpaceAvailable } from '../service/file/is-disk-space-available.js'
 
 export const createFolder = async (req, res, next) => {
   const { name, parentId } = req.body
@@ -16,11 +19,14 @@ export const createFolder = async (req, res, next) => {
 export const uploadFile = async (req, res, next) => {
   const folderId =
     req.body.folderId === 'null' ? null : Number(req.body.folderId)
-
   const { id } = req.user
-
   const filePath = getFilePath(req.file.name)
 
+  try {
+    await isDiskSpaceAvailable(id, req.file.size)
+  } catch (err) {
+    return next(err)
+  }
   fs.readFile(filePath, { encoding: 'utf-8' }, async function (err, file) {
     if (!err) {
       const hashSum = crypto.createHash('sha256')
@@ -31,6 +37,7 @@ export const uploadFile = async (req, res, next) => {
       const userFile = await createUserFile(
         folderId,
         req.file.originalname,
+        req.file.size,
         hash
       )
 
@@ -39,6 +46,7 @@ export const uploadFile = async (req, res, next) => {
       fs.rename(filePath, renamePath, function (err) {
         if (err) console.log(err)
       })
+
       return res.status(201).json(userFile)
     } else {
       console.log(err)
@@ -64,4 +72,30 @@ export const downloadFile = async (req, res, next) => {
   }
   const userFile = getFilePath(file.hash)
   res.download(userFile)
+}
+
+export const deleteFiles = async (req, res, next) => {
+  const { files, parendFolderId } = req.body
+  const { id } = req.user
+
+  try {
+    await deleteSelectedFiles(id, files)
+  } catch (err) {
+    console.log(err)
+    return next(err)
+  }
+
+  const userfiles = await getFilesFormCurrentFolder(id, parendFolderId)
+  res.status(200).json(userfiles)
+}
+
+export const getSpaceInfo = async (req, res, next) => {
+  const { id } = req.user
+
+  try {
+    const space = await getUsersSpace(id)
+    res.status(200).json({ space, availableSpace: 5000000000 })
+  } catch (err) {
+    return next(err)
+  }
 }

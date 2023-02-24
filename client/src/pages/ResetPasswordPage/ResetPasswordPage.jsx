@@ -53,6 +53,9 @@ function ResetPasswordPage() {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              backgroundColor: 'primary.formBg',
+              textAlign: 'center',
+              borderRadius: '20px',
             }}
           >
             Reset password link is not valide

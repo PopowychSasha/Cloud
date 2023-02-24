@@ -1,8 +1,10 @@
 import { Router } from 'express'
 import {
   createFolder,
+  deleteFiles,
   downloadFile,
   getFilesFromFolder,
+  getSpaceInfo,
   uploadFile,
 } from '../controller/file.js'
 import uploadFileMiddleware from '../middleware/file.js'
@@ -31,6 +33,18 @@ routes.get(
   '/file/:id',
   passport.authenticate('jwt', { session: false }),
   downloadFile
+)
+
+routes.delete(
+  '/files',
+  passport.authenticate('jwt', { session: false }),
+  deleteFiles
+)
+
+routes.get(
+  '/space',
+  passport.authenticate('jwt', { session: false }),
+  getSpaceInfo
 )
 
 export default routes

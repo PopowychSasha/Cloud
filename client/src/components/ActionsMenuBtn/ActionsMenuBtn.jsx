@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types'
 import { Button, Typography } from '@mui/material'
 import Image from 'mui-image'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import $api from '../../http/request'
 import { fileActions } from '../../redux/file'
 import { message } from '../Message/Message'
+import { useState } from 'react'
+import Preloader from '../Preloader/Preloader'
 
 function ActionsMenuBtn({
   title,
@@ -12,20 +14,26 @@ function ActionsMenuBtn({
   color,
   handleOpen,
   isFilePicker = false,
-  folderStack,
 }) {
   const dispatch = useDispatch()
+  const folderStack = useSelector((store) => store.folderStackReducer)
+  const [showPreloader, setShowPreloader] = useState(false)
 
   const sendFile = (data) => {
     if (folderStack[folderStack.length - 1] !== null) {
+      setShowPreloader(true)
       $api
         .post('/api/file', data)
         .then((data) => {
           if (data) {
+            setShowPreloader(false)
             dispatch(fileActions.addFile(data.data))
           }
         })
-        .catch((err) => message({ info: err.message, status: 'error' }))
+        .catch((err) => {
+          setShowPreloader(false)
+          message({ info: err.message, status: 'error' })
+        })
     } else {
       message({ info: 'you need to go to some folder', status: 'info' })
     }
@@ -37,6 +45,7 @@ function ActionsMenuBtn({
     data.append('folderId', folderStack[folderStack.length - 1])
 
     sendFile(data)
+    e.target.value = ''
   }
 
   return (
@@ -69,6 +78,7 @@ function ActionsMenuBtn({
           title
         )}
       </Typography>
+      {showPreloader && <Preloader showPreloader={showPreloader} />}
     </Button>
   )
 }
@@ -79,7 +89,6 @@ ActionsMenuBtn.propTypes = {
   color: PropTypes.string,
   handleOpen: PropTypes.func,
   isFilePicker: PropTypes.bool,
-  folderStack: PropTypes.array,
 }
 
 export default ActionsMenuBtn
