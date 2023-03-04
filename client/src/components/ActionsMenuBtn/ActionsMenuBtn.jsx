@@ -51,13 +51,15 @@ function ActionsMenuBtn({
   return (
     <Button
       sx={{
-        width: 225,
+        width: 150,
         height: 40,
         border: `3px solid ${color}`,
         display: 'flex',
         margin: 'auto',
         color: color,
         marginTop: 3,
+        disabled: true,
+        fontSize: '11px',
       }}
       onClick={handleOpen}
     >

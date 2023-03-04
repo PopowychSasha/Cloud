@@ -20,10 +20,10 @@ function Space() {
   return (
     <Box
       sx={{
-        width: 288,
-        position: 'relative',
+        width: 180,
+        position: 'absolute',
         bottom: '0px',
-        marginTop: '100%',
+        marginTop: '45%',
       }}
     >
       <Box sx={{ height: '3px', backgroundColor: 'primary.orange' }} />

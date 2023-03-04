@@ -10,6 +10,9 @@ export const folderStackSlice = createSlice({
     goBack: (state) => {
       return state.slice(0, -1)
     },
+    removeFolderStack: () => {
+      return [null]
+    },
   },
 })
 

@@ -116,6 +116,7 @@ export function FilesHeader() {
           />
         </Typography>
       </TableCell>
+      <TableCell></TableCell>
     </TableRow>
   )
 }

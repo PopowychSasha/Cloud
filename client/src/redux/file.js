@@ -13,6 +13,25 @@ export const fileSlice = createSlice({
     clearFilesData: () => {
       return []
     },
+    renameFile: (state, action) => {
+      return state.map((item) => {
+        if (
+          item.id === action.payload.id &&
+          item.isFolder === action.payload.isFolder
+        ) {
+          return { ...item, name: action.payload.name }
+        } else {
+          return item
+        }
+      })
+    },
+    favoriteFileToggle: (state, action) =>
+      state.map((file) =>
+        file.isFolder === action.payload.isFolder &&
+        file.id === action.payload.id
+          ? { ...file, isFavorite: !file.isFavorite }
+          : file
+      ),
   },
 })
 

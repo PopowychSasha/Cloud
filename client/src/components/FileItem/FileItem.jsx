@@ -1,5 +1,6 @@
+/* eslint-disable no-prototype-builtins */
 import PropTypes from 'prop-types'
-import { Checkbox, TableCell, TableRow } from '@mui/material'
+import { Box, Checkbox, TableCell, TableRow, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchFiles } from '../../redux/thunk/fetchFiles'
 import fileIcon from '../../image/file.png'
@@ -15,6 +16,9 @@ import { useState } from 'react'
 import { selectedFilesActions } from '../../redux/selectedFiles'
 import { folderStackActions } from '../../redux/folderStack'
 import Preloader from '../Preloader/Preloader'
+import Star from '../Star/Star'
+import './FileItem.css'
+import EditName from '../EditName/EditName'
 
 function FileItem({ file, idx }) {
   const dispatch = useDispatch()
@@ -24,13 +28,30 @@ function FileItem({ file, idx }) {
   const { isAllFilesSelected } = useSelector(
     (store) => store.selectedFilesReducer
   )
+
   const downloadFile = async (id) => {
     setShowPreloader(true)
     $api(`/api/file/${id}`, {
       responseType: 'blob',
-    }).then((response) => {
-      fileDownload(response.data, file.name)
-      setShowPreloader(false)
+    })
+      .then((response) => {
+        fileDownload(response.data, file.name)
+        setShowPreloader(false)
+      })
+      .catch((err) => console.log(err))
+  }
+
+  const onChangeCheckbox = () => {
+    setCheckedToggle((checkedToggle) => {
+      if (isAllFilesSelected) {
+        return checkedToggle
+      }
+      if (!checkedToggle) {
+        dispatch(selectedFilesActions.selectFile(file))
+      } else {
+        dispatch(selectedFilesActions.deleteSelectedFile(file))
+      }
+      return !checkedToggle
     })
   }
 
@@ -67,19 +88,7 @@ function FileItem({ file, idx }) {
             onClick={(e) => {
               e.stopPropagation()
             }}
-            onChange={() => {
-              setCheckedToggle((checkedToggle) => {
-                if (isAllFilesSelected) {
-                  return checkedToggle
-                }
-                if (!checkedToggle) {
-                  dispatch(selectedFilesActions.selectFile(file))
-                } else {
-                  dispatch(selectedFilesActions.deleteSelectedFile(file))
-                }
-                return !checkedToggle
-              })
-            }}
+            onChange={onChangeCheckbox}
           />
         </TableCell>
         <TableCell align="center">
@@ -89,8 +98,25 @@ function FileItem({ file, idx }) {
             width={40}
           />
         </TableCell>
-        <TableCell align="center" sx={{ color: '#FFF' }}>
-          {file.name}
+        <TableCell
+          align="center"
+          sx={{ color: '#FFF' }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {!file.hasOwnProperty('readonly') ||
+          (file.hasOwnProperty('readonly') && !file.readonly) ? (
+            <Box sx={{ display: 'flex' }}>
+              <Star file={file} />
+              <Box title="rename file">
+                <EditName file={file} />
+              </Box>
+            </Box>
+          ) : (
+            <Typography sx={{ display: 'flex' }}>
+              <Star file={file} />
+              <Box title="renaming is not allowed">{file.name}</Box>
+            </Typography>
+          )}
         </TableCell>
         <TableCell align="center" sx={{ color: '#FFF' }}>
           {!file.isFolder && prettyBytes(file.size)}
@@ -98,12 +124,22 @@ function FileItem({ file, idx }) {
         <TableCell align="center" sx={{ color: '#FFF' }}>
           {moment(file.created_at).format('MM Do YY, h:mm:ss a')}
         </TableCell>
-        <TableCell align="center" sx={{ color: '#FFF' }}>
-          <DownloadIcon
-            sx={{ cursor: 'pointer', visibility: file.isFolder && 'hidden' }}
-            onClick={() => downloadFile(file.id)}
-          />
-        </TableCell>
+        {!file.isFolder ? (
+          <TableCell align="center" sx={{ color: '#FFF' }}>
+            <DownloadIcon
+              sx={{
+                cursor: 'pointer',
+                visibility: file.isFolder && 'hidden',
+              }}
+              onClick={() => downloadFile(file.id)}
+            />
+          </TableCell>
+        ) : (
+          <>
+            <TableCell></TableCell>
+          </>
+        )}
+
         <Preloader showPreloader={showPreloader} />
       </TableRow>
     </>

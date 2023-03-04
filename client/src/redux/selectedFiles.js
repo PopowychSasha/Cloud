@@ -22,8 +22,8 @@ export const selectedFilesSlice = createSlice({
     deleteSelectedFile: (state, action) => {
       state.selectedFiles = state.selectedFiles.filter(
         (file) =>
-          file.id != action.payload.id &&
-          file.isFolder === action.payload.isFolder
+          file.isFolder !== action.payload.isFolder ||
+          file.id !== action.payload.id
       )
     },
     clearFilesData: () => {

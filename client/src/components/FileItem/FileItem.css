@@ -1,0 +1,14 @@
+.saveBtn,
+.cancelBtn {
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  display: none;
+}
+
+.edit {
+  display: inline;
+  width: 50px;
+  background-color: aquamarine;
+}

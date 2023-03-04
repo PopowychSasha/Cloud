@@ -13,13 +13,27 @@ function DeleteSelectedBtn() {
     (store) => store.selectedFilesReducer.selectedFiles
   )
   const folderStack = useSelector((store) => store.folderStackReducer)
+  const filesType = useSelector((store) => store.filesType.active)
+
   const deleteSelectedFile = () => {
-    if (selectedFiles.length) {
+    if (selectedFiles.length && filesType === 'USER_FILES') {
       $api
         .delete('/api/files', {
           data: {
             files: selectedFiles,
             parendFolderId: folderStack[folderStack.length - 1],
+          },
+        })
+        .then((data) => {
+          dispatch(fileActions.setFilesData(data.data))
+          dispatch(selectedFilesActions.clearFilesData())
+        })
+        .catch((err) => console.log(err))
+    } else if (selectedFiles.length && filesType === 'SHARED_FILES') {
+      $api
+        .delete('/api/files/shared', {
+          data: {
+            files: selectedFiles,
           },
         })
         .then((data) => {
@@ -34,13 +48,14 @@ function DeleteSelectedBtn() {
   return (
     <Button
       sx={{
-        width: 225,
+        width: 150,
         height: 40,
         border: `3px solid black`,
         display: 'flex',
         margin: 'auto',
         color: 'black',
         marginTop: 3,
+        fontSize: '10px',
       }}
       onClick={deleteSelectedFile}
     >

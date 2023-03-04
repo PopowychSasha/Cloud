@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux'
 import { checkAuth } from '../../redux/thunk/checkAuth'
 import ResetPasswordPage from '../../pages/ResetPasswordPage/ResetPasswordPage'
 import AccountActivationPage from '../../pages/AccountActivationPage/AccountActivationPage'
+import SharedFilePage from '../../pages/SharedFilePage/SharedFilePage'
 
 const App = () => {
   const isLoggedIn = useSelector((store) => store.userReducer.isLoggedIn)
@@ -20,6 +21,7 @@ const App = () => {
     { path: '/', element: <AuthPage /> },
     { path: '/reset_password/:token', element: <ResetPasswordPage /> },
     { path: '/activation/:token', element: <AccountActivationPage /> },
+    { path: '/share/file/:token', element: <SharedFilePage /> },
   ]
   const privateRoute = [
     ...publicRoute,

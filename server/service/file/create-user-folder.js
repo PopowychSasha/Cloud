@@ -4,7 +4,7 @@ export const createUserFolder = async (name, parent_id, user_id) => {
   const [id] = await db('folders').insert({ name: name, parent_id, user_id })
 
   return db('folders')
-    .select('*', db.raw('true as isFolder'))
+    .select('*', db.raw('true as isFolder'), db.raw('null as token'))
     .where('id', '=', id)
     .first()
 }

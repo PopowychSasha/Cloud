@@ -8,6 +8,15 @@ import { getUsersFile } from '../service/file/get-users-file.js'
 import { deleteSelectedFiles } from '../service/file/delete-selected-files.js'
 import { getUsersSpace } from '../service/file/get-users-space.js'
 import { isDiskSpaceAvailable } from '../service/file/is-disk-space-available.js'
+import { v4 as uuidv4 } from 'uuid'
+import { findUserByEmailAndPassword } from '../service/auth/find-user-by-email-and-password.js'
+import { fetchShareUserFiles } from '../service/file/fetch-share-user-files.js'
+import { findUserByEmail } from '../service/auth/find-user-by-email.js'
+import { deleteSharedSelectedFiles } from '../service/file/delete-shared-selected-files.js'
+import { renameFile } from '../service/file/rename-file.js'
+import { shareFileForUser } from '../service/file/share-file-for-user.js'
+import { toggleFavoriteStatus } from '../service/file/toggle-favorite-status.js'
+import { getFileIdByShareToken } from '../service/file/get-file-id-by-share-token.js'
 
 export const createFolder = async (req, res, next) => {
   const { name, parentId } = req.body
@@ -33,12 +42,14 @@ export const uploadFile = async (req, res, next) => {
       hashSum.update(file)
 
       const hash = hashSum.digest('hex')
+      const sharedFileToken = uuidv4()
 
       const userFile = await createUserFile(
         folderId,
         req.file.originalname,
         req.file.size,
-        hash
+        hash,
+        sharedFileToken
       )
 
       const renamePath = getFilePath(hash)
@@ -47,7 +58,7 @@ export const uploadFile = async (req, res, next) => {
         if (err) console.log(err)
       })
 
-      return res.status(201).json(userFile)
+      return res.status(201).json({ ...userFile, token: sharedFileToken })
     } else {
       console.log(err)
     }
@@ -64,7 +75,6 @@ export const getFilesFromFolder = async (req, res, next) => {
 
 export const downloadFile = async (req, res, next) => {
   const { id } = req.params
-
   const file = await getUsersFile(req.user.id, id)
 
   if (!file) {
@@ -98,4 +108,83 @@ export const getSpaceInfo = async (req, res, next) => {
   } catch (err) {
     return next(err)
   }
+}
+
+export const shareFileByLink = async (req, res, next) => {
+  const { email, password, share_token } = req.body
+  const user = await findUserByEmailAndPassword(email, password)
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' })
+  }
+  try {
+    const { id } = await getFileIdByShareToken(share_token)
+    if (!id) {
+      throw new Error('invalid share token')
+    }
+
+    await shareFileForUser(user.id, [{ id: id }])
+  } catch (err) {
+    return next(err)
+  }
+  return res.status(200).json({})
+}
+
+export const fetchShareFile = async (req, res, next) => {
+  const { id } = req.user
+  const sharedFiles = await fetchShareUserFiles(id)
+  return res.status(200).json(sharedFiles)
+}
+
+export const shareFileByEmail = async (req, res, next) => {
+  const { email, files, readonly } = req.body
+
+  if (files.length === 0) {
+    return res.status(500).json({ message: 'You need to select some files' })
+  }
+  const folders = files.find((file) => file.isFolder)
+
+  if (folders) {
+    return res.status(500).json({ message: 'you cannot share  folders' })
+  }
+  const user = await findUserByEmail(email)
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' })
+  }
+
+  try {
+    await shareFileForUser(user.id, files, readonly)
+    return res.json({})
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const deleteSharedFiles = async (req, res, next) => {
+  const { files } = req.body
+  const { id } = req.user
+  const deleteFilesId = files.map((file) => file.id)
+
+  await deleteSharedSelectedFiles(id, deleteFilesId)
+
+  const sharedFiles = await fetchShareUserFiles(id)
+  return res.status(200).json(sharedFiles)
+}
+
+export const renameUsersFile = async (req, res, next) => {
+  const { fileId, name, isFolder } = req.body
+
+  await renameFile(name, fileId, isFolder)
+
+  return res.status(200).json({})
+}
+
+export const favoriteFileToggle = async (req, res, next) => {
+  const { fileId } = req.params
+  const { id } = req.user
+
+  await toggleFavoriteStatus(fileId, id)
+
+  return res.status(200).json({})
 }
