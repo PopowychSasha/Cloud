@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../redux/user'
 import $api from '../../http/request'
 import { useNavigate } from 'react-router-dom'
-import { fileActions } from '../../redux/file'
+import { filesActions } from '../../redux/files'
 
 // eslint-disable-next-line no-unused-vars
 function Header({ folderStack }) {
@@ -22,7 +22,7 @@ function Header({ folderStack }) {
     folderStack = [null]
     localStorage.removeItem('accessToken')
     dispatch(userActions.clearUserData())
-    dispatch(fileActions.clearFilesData())
+    dispatch(filesActions.clearFilesData())
     $api('/api/logout').then(() => {
       navigate('/')
     })

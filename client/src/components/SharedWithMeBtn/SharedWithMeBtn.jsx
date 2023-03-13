@@ -2,18 +2,22 @@ import { Button, Typography } from '@mui/material'
 import PeopleIcon from '@mui/icons-material/People'
 import $api from '../../http/request'
 import { useDispatch, useSelector } from 'react-redux'
-import { fileActions } from '../../redux/file'
+import { filesActions } from '../../redux/files'
 import { filesTypeActions } from '../../redux/filesType'
 
 function SharedWithMeBtn() {
   const dispatch = useDispatch()
   const filesType = useSelector((store) => store.filesType.active)
+  const sorting = useSelector((store) => store.sortingReducer)
+  const { rowsPerPage } = useSelector((store) => store.filesReducer)
 
   const fetchSharedFiles = () => {
-    $api('/api/files/share')
+    $api(
+      `/api/files/share?column=${sorting.element}&order=${sorting.order}&rowsPerPage=${rowsPerPage}`
+    )
       .then((data) => {
         if (data) {
-          dispatch(fileActions.setFilesData(data.data))
+          dispatch(filesActions.setFilesData(data.data))
           dispatch(filesTypeActions.setSharedFile())
         }
       })

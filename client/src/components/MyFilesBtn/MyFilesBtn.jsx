@@ -7,14 +7,22 @@ import { filesTypeActions } from '../../redux/filesType'
 
 function MyFilesBtn() {
   const dispatch = useDispatch()
+  const sorting = useSelector((store) => store.sortingReducer)
+  const filesType = useSelector((store) => store.filesType.active)
+  const { rowsPerPage } = useSelector((store) => store.filesReducer)
 
   const fetchMyFiles = () => {
     dispatch(folderStackActions.removeFolderStack())
-    dispatch(fetchFiles({ parendFolderId: null }))
+    dispatch(
+      fetchFiles({
+        parendFolderId: null,
+        element: sorting.element,
+        order: sorting.order,
+        rowsPerPage: rowsPerPage,
+      })
+    )
     dispatch(filesTypeActions.setUsersFile())
   }
-
-  const filesType = useSelector((store) => store.filesType.active)
 
   return (
     <Button

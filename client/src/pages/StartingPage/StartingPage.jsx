@@ -25,7 +25,7 @@ function StartingPage() {
       sx={{
         width: 3,
         backgroundColor: '#FA4616',
-        minHeight: 'calc(100vh - 100px)',
+        minHeight: 'calc(100vh - 50px)',
       }}
     />
   )
@@ -35,7 +35,8 @@ function StartingPage() {
         bgcolor: 'primary.main',
         border: 'solid',
         minWidth: '100%',
-        minHeight: '100vh',
+        height: '97vh',
+        overflow: 'hidden',
       }}
     >
       <Header />

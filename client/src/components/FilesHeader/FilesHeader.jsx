@@ -1,16 +1,51 @@
-import { Checkbox, TableCell, TableRow, Typography } from '@mui/material'
-import Image from 'mui-image'
-import sort from '../../image/sort.png'
+import { Checkbox, TableCell, TableRow } from '@mui/material'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react'
 import { selectedFilesActions } from '../../redux/selectedFiles'
 import { GoBack } from '../GoBack/GoBack'
+import $api from '../../http/request'
+import { filesActions } from '../../redux/files'
+import { sortingActions } from '../../redux/sorting'
+import FilesHeaderItem from '../FilesHeaderItem/FilesHeaderItem'
 
 export function FilesHeader() {
   const dispatch = useDispatch()
-  const files = useSelector((store) => store.fileReducer)
+  const sorting = useSelector((store) => store.sortingReducer)
+  const { files } = useSelector((store) => store.filesReducer)
   const [mainCheckerActive, setMainCheckerActive] = useState(false)
+  const { rowsPerPage } = useSelector((store) => store.filesReducer)
+
+  const folderStack = useSelector((store) => store.folderStackReducer)
+  const filesType = useSelector((store) => store.filesType.active)
+
+  const sortFiles = () => {
+    const requestUrl =
+      filesType === 'SHARED_FILES'
+        ? `/api/files/share?column=${sorting.element}&order=${sorting.order}&rowsPerPage=${rowsPerPage}`
+        : `/api/folder/${folderStack[folderStack.length - 1]}?column=${
+            sorting.element
+          }&order=${
+            sorting.order === 'asc' ? 'desc' : 'asc'
+          }&rowsPerPage=${rowsPerPage}`
+
+    $api
+      .get(requestUrl)
+      .then((data) => {
+        dispatch(filesActions.setFilesData(data.data))
+      })
+      .catch((err) => console.log(err))
+  }
+
+  const onClickColumn = (column) => {
+    dispatch(
+      sortingActions.setSortType({
+        element: column,
+        order: sorting.order,
+      })
+    )
+    sortFiles(column)
+  }
 
   return (
     <TableRow>
@@ -35,87 +70,27 @@ export function FilesHeader() {
         />
       </TableCell>
       <GoBack />
-      <TableCell
-        align="center"
-        sx={{
-          color: 'primary.orange',
-          cursor: 'pointer',
-          '&:hover': {
-            background: '#344174',
-          },
-        }}
-      >
-        <Typography
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          Title{' '}
-          <Image
-            src={sort}
-            alt="<"
-            width={10}
-            height={15}
-            style={{ cursor: 'pointer', marginLeft: 5 }}
-          />
-        </Typography>
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          color: 'primary.orange',
-          cursor: 'pointer',
-          '&:hover': {
-            background: '#344174',
-          },
-        }}
-      >
-        <Typography
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          File size
-          <Image
-            src={sort}
-            alt="<"
-            width={10}
-            height={15}
-            style={{ cursor: 'pointer', marginLeft: 5 }}
-          />
-        </Typography>
-      </TableCell>
-      <TableCell
-        align="center"
-        sx={{
-          color: 'primary.orange',
-          cursor: 'pointer',
-          '&:hover': {
-            background: '#344174',
-          },
-        }}
-      >
-        <Typography
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          Added
-          <Image
-            src={sort}
-            alt="<"
-            width={10}
-            height={15}
-            style={{ cursor: 'pointer', marginLeft: 5 }}
-          />
-        </Typography>
-      </TableCell>
+      <FilesHeaderItem
+        onClickColumn={onClickColumn}
+        clickColumn={'name'}
+        title={'Title'}
+        order={sorting.order}
+        element={sorting.element}
+      />
+      <FilesHeaderItem
+        onClickColumn={onClickColumn}
+        clickColumn={'size'}
+        title={'File size'}
+        order={sorting.order}
+        element={sorting.element}
+      />
+      <FilesHeaderItem
+        onClickColumn={onClickColumn}
+        clickColumn={'created_at'}
+        title={'Added'}
+        order={sorting.order}
+        element={sorting.element}
+      />
       <TableCell></TableCell>
     </TableRow>
   )

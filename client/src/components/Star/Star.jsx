@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 import $api from '../../http/request'
-import { fileActions } from '../../redux/file'
+import { filesActions } from '../../redux/files'
 import StarIcon from '@mui/icons-material/Star'
 
 function Star({ file }) {
@@ -11,7 +11,7 @@ function Star({ file }) {
         .patch(`/api/file/favorites/${file.id}`)
         .then(() => {
           dispatch(
-            fileActions.favoriteFileToggle({
+            filesActions.favoriteFileToggle({
               id: file.id,
               isFolder: file.isFolder,
             })

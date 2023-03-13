@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
-import { Table, TableBody, Typography } from '@mui/material'
+import { Box, Table, TableBody, Typography } from '@mui/material'
 import FileItem from '../FileItem/FileItem'
 
 function ListOfFiles({ files }) {
   return (
-    <>
+    <Box sx={{ maxHeight: '70%', overflow: 'scroll' }}>
       {files.length > 0 ? (
         <Table aria-label="simple table">
           <TableBody>
@@ -26,7 +26,7 @@ function ListOfFiles({ files }) {
           folder is empty
         </Typography>
       )}
-    </>
+    </Box>
   )
 }
 

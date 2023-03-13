@@ -15,10 +15,16 @@ import {
 } from '../controller/file.js'
 import uploadFileMiddleware from '../middleware/file.js'
 import { passport } from '../authentication/passport.js'
-import { check } from 'express-validator'
+import { check, query } from 'express-validator'
 import { validator } from '../request-validator/validator.js'
 
 const routes = Router()
+const rowsPerPageValidator = [
+  query('rowsPerPage')
+    .isNumeric()
+    .isLength({ mix: 5, max: 30 })
+    .withMessage('the number of files per page is limited'),
+]
 
 routes.post(
   '/folder',
@@ -34,6 +40,8 @@ routes.post(
 routes.get(
   '/folder/:id',
   passport.authenticate('jwt', { session: false }),
+  rowsPerPageValidator,
+  validator,
   getFilesFromFolder
 )
 
@@ -60,6 +68,7 @@ routes.post('/share/link', shareFileByLink)
 routes.get(
   '/files/share',
   passport.authenticate('jwt', { session: false }),
+  rowsPerPageValidator,
   fetchShareFile
 )
 

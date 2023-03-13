@@ -66,10 +66,18 @@ export const uploadFile = async (req, res, next) => {
 }
 
 export const getFilesFromFolder = async (req, res, next) => {
+  const { id } = req.user
+  const { rowsPerPage, start, column, order } = req.query
   const parendFolderId = req.params.id === 'null' ? null : Number(req.params.id)
 
-  const { id } = req.user
-  const files = await getFilesFormCurrentFolder(id, parendFolderId)
+  const files = await getFilesFormCurrentFolder(
+    id,
+    parendFolderId,
+    column,
+    order,
+    +rowsPerPage,
+    +start
+  )
   res.status(200).json(files)
 }
 
@@ -87,6 +95,7 @@ export const downloadFile = async (req, res, next) => {
 export const deleteFiles = async (req, res, next) => {
   const { files, parendFolderId } = req.body
   const { id } = req.user
+  const { rowsPerPage, start, column, order } = req.query
 
   try {
     await deleteSelectedFiles(id, files)
@@ -95,7 +104,14 @@ export const deleteFiles = async (req, res, next) => {
     return next(err)
   }
 
-  const userfiles = await getFilesFormCurrentFolder(id, parendFolderId)
+  const userfiles = await getFilesFormCurrentFolder(
+    id,
+    parendFolderId,
+    column,
+    order,
+    +rowsPerPage,
+    +start
+  )
   res.status(200).json(userfiles)
 }
 
@@ -132,7 +148,14 @@ export const shareFileByLink = async (req, res, next) => {
 
 export const fetchShareFile = async (req, res, next) => {
   const { id } = req.user
-  const sharedFiles = await fetchShareUserFiles(id)
+  const { rowsPerPage, start, column, order } = req.query
+  const sharedFiles = await fetchShareUserFiles(
+    id,
+    column,
+    order,
+    +rowsPerPage,
+    +start
+  )
   return res.status(200).json(sharedFiles)
 }
 
@@ -164,11 +187,18 @@ export const shareFileByEmail = async (req, res, next) => {
 export const deleteSharedFiles = async (req, res, next) => {
   const { files } = req.body
   const { id } = req.user
+  const { rowsPerPage, start, column, order } = req.query
   const deleteFilesId = files.map((file) => file.id)
 
   await deleteSharedSelectedFiles(id, deleteFilesId)
 
-  const sharedFiles = await fetchShareUserFiles(id)
+  const sharedFiles = await fetchShareUserFiles(
+    id,
+    column,
+    order,
+    +rowsPerPage,
+    +start
+  )
   return res.status(200).json(sharedFiles)
 }
 

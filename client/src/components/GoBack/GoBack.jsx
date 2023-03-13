@@ -10,6 +10,8 @@ import { folderStackActions } from '../../redux/folderStack'
 export function GoBack() {
   const dispatch = useDispatch()
   const folderStack = useSelector((store) => store.folderStackReducer)
+  const sorting = useSelector((store) => store.sortingReducer)
+  const { rowsPerPage } = useSelector((store) => store.filesReducer)
 
   const goBack = () => {
     if (folderStack.length > 1) {
@@ -18,6 +20,9 @@ export function GoBack() {
       dispatch(
         fetchFiles({
           parendFolderId: folderStack[folderStack.length - 2],
+          element: sorting.element,
+          order: sorting.order,
+          rowsPerPage: rowsPerPage,
         })
       )
     } else {

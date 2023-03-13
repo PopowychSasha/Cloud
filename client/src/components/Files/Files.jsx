@@ -9,11 +9,19 @@ import { GoBack } from '../GoBack/GoBack'
 function Files() {
   const dispatch = useDispatch()
   const user = useSelector((store) => store.userReducer)
-  const files = useSelector((store) => store.fileReducer)
+  const { files, rowsPerPage } = useSelector((store) => store.filesReducer)
+  const sorting = useSelector((store) => store.sortingReducer)
 
   useEffect(() => {
     if (user.id) {
-      dispatch(fetchFiles({ parendFolderId: null }))
+      dispatch(
+        fetchFiles({
+          parendFolderId: null,
+          element: sorting.element,
+          order: sorting.order,
+          rowsPerPage: rowsPerPage,
+        })
+      )
     }
   }, [user])
 

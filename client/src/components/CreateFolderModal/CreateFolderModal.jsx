@@ -9,7 +9,7 @@ import SendIcon from '@mui/icons-material/Send'
 import $api from '../../http/request'
 import { message } from '../Message/Message'
 import { useDispatch, useSelector } from 'react-redux'
-import { fileActions } from '../../redux/file'
+import { filesActions } from '../../redux/files'
 
 const style = {
   position: 'absolute',
@@ -39,7 +39,7 @@ function CreateFolderModal({ createFolderOpen, handleClose }) {
       .then((data) => {
         if (data) {
           setName('')
-          dispatch(fileActions.addFile(data.data))
+          dispatch(filesActions.addFile(data.data))
           handleClose()
         }
       })

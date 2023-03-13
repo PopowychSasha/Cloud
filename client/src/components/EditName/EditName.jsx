@@ -1,7 +1,7 @@
 import EdiText from 'react-editext'
 import { useDispatch } from 'react-redux'
 import $api from '../../http/request'
-import { fileActions } from '../../redux/file'
+import { filesActions } from '../../redux/files'
 
 function EditName({ file }) {
   const dispatch = useDispatch()
@@ -15,7 +15,7 @@ function EditName({ file }) {
       })
       .then(() => {
         dispatch(
-          fileActions.renameFile({
+          filesActions.renameFile({
             id: file.id,
             isFolder: file.isFolder,
             name: fileName,

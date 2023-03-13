@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export const filesTypeSlice = createSlice({
-  name: 'folderStackSlice',
+  name: 'filesTy',
   initialState: {
     types: ['USER_FILES', 'SHARED_FILES'],
     active: 'USER_FILES',

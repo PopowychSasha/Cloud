@@ -24,6 +24,8 @@ function FileItem({ file, idx }) {
   const dispatch = useDispatch()
   const [checkedToggle, setCheckedToggle] = useState(false)
   const [showPreloader, setShowPreloader] = useState(false)
+  const sorting = useSelector((store) => store.sortingReducer)
+  const { rowsPerPage } = useSelector((store) => store.filesReducer)
 
   const { isAllFilesSelected } = useSelector(
     (store) => store.selectedFilesReducer
@@ -72,7 +74,14 @@ function FileItem({ file, idx }) {
           if (file.isFolder) {
             dispatch(folderStackActions.goToFolder(file.id))
             dispatch(selectedFilesActions.clearFilesData())
-            dispatch(fetchFiles({ parendFolderId: file.id }))
+            dispatch(
+              fetchFiles({
+                parendFolderId: file.id,
+                element: sorting.element,
+                order: sorting.order,
+                rowsPerPage: rowsPerPage,
+              })
+            )
           }
         }}
       >

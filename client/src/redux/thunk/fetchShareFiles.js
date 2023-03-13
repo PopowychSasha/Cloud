@@ -2,17 +2,11 @@ import { message } from '../../components/Message/Message'
 import $api from '../../http/request'
 import { filesActions } from '../files'
 
-function fetchFiles({
-  parendFolderId,
-  element,
-  order,
-  rowsPerPage = null,
-  start = 0,
-}) {
+function fetchShareFiles({ element, order, rowsPerPage = null, start = 0 }) {
   return (dispatch) => {
     $api
       .get(
-        `/api/folder/${parendFolderId}?column=${element}&order=${order}&rowsPerPage=${rowsPerPage}&start=${start}`
+        `/api/files/share?column=${element}&order=${order}&rowsPerPage=${rowsPerPage}&start=${start}`
       )
       .then((data) => {
         if (data) {
@@ -24,4 +18,4 @@ function fetchFiles({
       })
   }
 }
-export { fetchFiles }
+export { fetchShareFiles }

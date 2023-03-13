@@ -3,7 +3,7 @@ import { Button, Typography } from '@mui/material'
 import Image from 'mui-image'
 import { useDispatch, useSelector } from 'react-redux'
 import $api from '../../http/request'
-import { fileActions } from '../../redux/file'
+import { filesActions } from '../../redux/files'
 import { message } from '../Message/Message'
 import { useState } from 'react'
 import Preloader from '../Preloader/Preloader'
@@ -27,7 +27,7 @@ function ActionsMenuBtn({
         .then((data) => {
           if (data) {
             setShowPreloader(false)
-            dispatch(fileActions.addFile(data.data))
+            dispatch(filesActions.addFile(data.data))
           }
         })
         .catch((err) => {

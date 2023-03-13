@@ -3,7 +3,7 @@ import Image from 'mui-image'
 import { useDispatch, useSelector } from 'react-redux'
 import $api from '../../http/request'
 import delete_icon from '../../image/delete.png'
-import { fileActions } from '../../redux/file'
+import { filesActions } from '../../redux/files'
 import { selectedFilesActions } from '../../redux/selectedFiles'
 import { message } from '../Message/Message'
 
@@ -15,29 +15,42 @@ function DeleteSelectedBtn() {
   const folderStack = useSelector((store) => store.folderStackReducer)
   const filesType = useSelector((store) => store.filesType.active)
 
+  const sorting = useSelector((store) => store.sortingReducer)
+  const { rowsPerPage } = useSelector((store) => store.filesReducer)
+
   const deleteSelectedFile = () => {
     if (selectedFiles.length && filesType === 'USER_FILES') {
       $api
-        .delete('/api/files', {
-          data: {
-            files: selectedFiles,
-            parendFolderId: folderStack[folderStack.length - 1],
-          },
-        })
+        .delete(
+          `/api/files?column=${sorting.element}&order=${
+            sorting.order
+          }&rowsPerPage=${rowsPerPage}&start=${0}`,
+          {
+            data: {
+              files: selectedFiles,
+              parendFolderId: folderStack[folderStack.length - 1],
+            },
+          }
+        )
         .then((data) => {
-          dispatch(fileActions.setFilesData(data.data))
+          dispatch(filesActions.setFilesData(data.data))
           dispatch(selectedFilesActions.clearFilesData())
         })
         .catch((err) => console.log(err))
     } else if (selectedFiles.length && filesType === 'SHARED_FILES') {
       $api
-        .delete('/api/files/shared', {
-          data: {
-            files: selectedFiles,
-          },
-        })
+        .delete(
+          `/api/files/shared?column=${sorting.element}&order=${
+            sorting.order
+          }&rowsPerPage=${rowsPerPage}&start=${0}`,
+          {
+            data: {
+              files: selectedFiles,
+            },
+          }
+        )
         .then((data) => {
-          dispatch(fileActions.setFilesData(data.data))
+          dispatch(filesActions.setFilesData(data.data))
           dispatch(selectedFilesActions.clearFilesData())
         })
         .catch((err) => console.log(err))

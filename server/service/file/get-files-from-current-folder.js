@@ -1,7 +1,14 @@
 import db from '../../db/db.js'
 
-export const getFilesFormCurrentFolder = async (user_id, parent_id) =>
-  db
+export const getFilesFormCurrentFolder = async (
+  user_id,
+  parent_id,
+  column = 'id',
+  order = 'asc',
+  rowsPerPage = null,
+  start = 0
+) => {
+  const filesFoldersQuery = db
     .select(
       'id',
       'name',
@@ -47,3 +54,13 @@ export const getFilesFormCurrentFolder = async (user_id, parent_id) =>
           'favorite_files.file_id'
         )
     })
+    .orderBy(column, order)
+
+  const { count } = await db
+    .from(filesFoldersQuery.as('filesFoldersQuery'))
+    .count('*', { as: 'count' })
+    .first()
+
+  const files = await filesFoldersQuery.limit(rowsPerPage).offset(start)
+  return { files, countOfFilesInFolder: count }
+}
