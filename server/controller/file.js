@@ -17,6 +17,8 @@ import { renameFile } from '../service/file/rename-file.js'
 import { shareFileForUser } from '../service/file/share-file-for-user.js'
 import { toggleFavoriteStatus } from '../service/file/toggle-favorite-status.js'
 import { getFileIdByShareToken } from '../service/file/get-file-id-by-share-token.js'
+import { searchUserFiles } from '../service/file/search-user-files.js'
+import { getSearchParts } from '../service/file/get-search-parts.js'
 
 export const createFolder = async (req, res, next) => {
   const { name, parentId } = req.body
@@ -217,4 +219,22 @@ export const favoriteFileToggle = async (req, res, next) => {
   await toggleFavoriteStatus(fileId, id)
 
   return res.status(200).json({})
+}
+
+export const searchFiles = async (req, res, next) => {
+  let { search } = req.query
+  const { rowsPerPage, start, column, order } = req.query
+  const { id } = req.user
+
+  const { exactSearchParts, searchParts, ext } = getSearchParts(search)
+
+  const files = await searchUserFiles(
+    id,
+    { parts: [...exactSearchParts, ...searchParts], ext: ext },
+    column,
+    order,
+    +rowsPerPage,
+    +start
+  )
+  return res.status(200).json(files)
 }

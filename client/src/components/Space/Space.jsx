@@ -8,7 +8,7 @@ import { Progress } from 'react-sweet-progress'
 import 'react-sweet-progress/lib/style.css'
 
 function Space() {
-  const files = useSelector((store) => store.fileReducer)
+  const files = useSelector((store) => store.filesReducer)
   const [spaceInfo, setSpaceInfo] = useState({ space: 0, availableSpace: 0 })
   useEffect(() => {
     $api('/api/space')

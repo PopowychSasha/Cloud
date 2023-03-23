@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
+import SearchFiles from '../SearchFiles/SearchFiles'
 import SharedLink from '../SharedLink/SharedLink'
 
 function Details() {
@@ -19,6 +20,7 @@ function Details() {
         Details
       </Typography>
       <Box sx={{ height: 3, backgroundColor: '#FA4616' }} />
+      <SearchFiles />
       <Box sx={{ position: 'absolute', bottom: '50px' }}>
         {filesType === 'USER_FILES' && <SharedLink />}
       </Box>

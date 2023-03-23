@@ -12,10 +12,12 @@ export function Pagination() {
   const [start, setStart] = useState(0)
   const [pageNumber, setPageNumber] = useState(1)
 
+  const searchString = useSelector((store) => store.searchFilesReducer)
+
   useEffect(() => {
     setPageNumber(1)
     setStart(0)
-  }, [filesType])
+  }, [filesType, searchString])
 
   return (
     <Box

@@ -9,6 +9,7 @@ import {
   getFilesFromFolder,
   getSpaceInfo,
   renameUsersFile,
+  searchFiles,
   shareFileByEmail,
   shareFileByLink,
   uploadFile,
@@ -95,6 +96,14 @@ routes.patch(
   '/file/favorites/:fileId',
   passport.authenticate('jwt', { session: false }),
   favoriteFileToggle
+)
+
+routes.get(
+  '/files/search',
+  passport.authenticate('jwt', { session: false }),
+  rowsPerPageValidator,
+  validator,
+  searchFiles
 )
 
 export default routes

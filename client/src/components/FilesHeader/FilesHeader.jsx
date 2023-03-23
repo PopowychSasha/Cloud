@@ -8,6 +8,7 @@ import $api from '../../http/request'
 import { filesActions } from '../../redux/files'
 import { sortingActions } from '../../redux/sorting'
 import FilesHeaderItem from '../FilesHeaderItem/FilesHeaderItem'
+import { searchFilesActions } from '../../redux/searchFiles'
 
 export function FilesHeader() {
   const dispatch = useDispatch()
@@ -18,6 +19,7 @@ export function FilesHeader() {
 
   const folderStack = useSelector((store) => store.folderStackReducer)
   const filesType = useSelector((store) => store.filesType.active)
+  const searchString = useSelector((store) => store.searchFilesReducer)
 
   const sortFiles = () => {
     const requestUrl =
@@ -29,12 +31,33 @@ export function FilesHeader() {
             sorting.order === 'asc' ? 'desc' : 'asc'
           }&rowsPerPage=${rowsPerPage}`
 
-    $api
-      .get(requestUrl)
-      .then((data) => {
-        dispatch(filesActions.setFilesData(data.data))
-      })
-      .catch((err) => console.log(err))
+    if (searchString.length === 0) {
+      $api
+        .get(requestUrl)
+        .then((data) => {
+          dispatch(filesActions.setFilesData(data.data))
+        })
+        .catch((err) => console.log(err))
+    } else {
+      $api
+        .get(
+          `/api/files/search?search=${searchString}&column=${
+            sorting.element
+          }&order=${
+            sorting.order === 'asc' ? 'desc' : 'asc'
+          }&rowsPerPage=${rowsPerPage}&start=${0}`
+        )
+        .then((data) => {
+          dispatch(searchFilesActions.setSearchString(searchString))
+          dispatch(
+            filesActions.setFilesData({
+              files: data.data.files,
+              countOfFilesInFolder: data.data.countOfFilesInFolder,
+            })
+          )
+        })
+        .catch((err) => console.log(err))
+    }
   }
 
   const onClickColumn = (column) => {
