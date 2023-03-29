@@ -49,6 +49,7 @@ export const deleteSelectedFiles = async (userId, files) => {
 
   const filesOnServerNeedDelete = await db()
     .from('files')
+    .select('hash')
     .groupBy('hash')
     .havingRaw('count(hash) = 1')
 

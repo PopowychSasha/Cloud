@@ -10,6 +10,7 @@
   "scripts": {
     "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --detectOpenHandles",
     "dev": "nodemon src/index.js",
+    "prod": "node src/index.js",
     "knex_init": "npx knex init --cwd ./db/",
     "create_migrate": "npx knex migrate:make --cwd ./db/",
     "migrate_up": "npx knex migrate:up --cwd ./db/",

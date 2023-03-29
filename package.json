@@ -10,6 +10,7 @@
   "scripts": {
     "client": "cd client && npm start",
     "server": "cd server && npm run dev",
+    "server_prod": "cd server && npm run prod",
     "lint_client": "cd client && npx eslint .",
     "prettier_client": "npx prettier --write ./client --ignore-unknown",
     "prettier_check_client": "npx prettier --check ./client --ignore-unknown",
